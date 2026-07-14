@@ -214,6 +214,23 @@ button:disabled {
   color: var(--muted);
 }
 
+.guardrail-warnings {
+  margin-top: 14px;
+  border-left: 4px solid var(--amber);
+  padding: 10px 12px;
+  background: #fff7ed;
+  color: #7c2d12;
+  font-size: 0.9rem;
+}
+
+.guardrail-warnings p {
+  margin: 0;
+}
+
+.guardrail-warnings p + p {
+  margin-top: 6px;
+}
+
 .scoreboard {
   display: flex;
   flex-wrap: wrap;

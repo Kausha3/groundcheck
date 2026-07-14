@@ -16,6 +16,8 @@ GroundCheck helps developers catch AI agent output that looks right but is not g
 - Flags hallucinated, contradicted, unsupported, or overreaching claims with severity and confidence.
 - Includes realistic lease, API specification, and product requirements test cases.
 - Exports results as a text report or structured JSON.
+- Treats source and agent text as untrusted data and visibly warns on instruction-like content.
+- Requires exact source evidence before a claim is allowed to PASS.
 
 ## Demo case
 
@@ -32,6 +34,33 @@ The built-in HomeWiz lease example includes three planted errors and several sup
 2. FastAPI validates and bounds the request before calling the OpenAI Responses API.
 3. GPT-5.6 extracts atomic factual claims and returns a typed `CheckResult`.
 4. The frontend presents contradictions first, ordered by severity, followed by supported claims.
+
+## Guardrails
+
+- The system contract explicitly rejects instructions, role impersonation, and delimiter attacks embedded in either input.
+- Inputs are JSON-encoded as untrusted data instead of interpolated into prompt headings.
+- Structured Pydantic output constrains every verdict to the expected fields and values.
+- A server-side evidence check fails closed when a PASS lacks a verbatim excerpt from the source.
+- Instruction-like content is surfaced in the interface without deleting or rewriting the evidence.
+- Requests use bounded inputs and outputs, timeouts, retries, privacy-preserving safety identifiers, and `store=False`.
+
+## Evaluations
+
+Fast guardrail tests run without an API call:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The live evaluation suite runs six human-labeled cases, including three prompt-injection attacks:
+
+```bash
+python evals/run_evals.py
+```
+
+Use `python evals/run_evals.py --case source-prompt-injection` to run one case. GitHub Actions runs unit tests on every push and exposes the live model suite as a manually triggered workflow so API spending remains intentional. The live workflow requires an `OPENAI_API_KEY` repository secret.
+
+See the [latest evaluation summary](outputs/evaluation_report.md) for case-by-case coverage.
 
 ## Run locally
 
@@ -75,6 +104,7 @@ Returns:
 ```json
 {
   "model": "gpt-5.6",
+  "warnings": [],
   "summary": "Short review summary",
   "verdicts": [
     {

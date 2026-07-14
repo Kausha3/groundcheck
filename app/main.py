@@ -2,6 +2,7 @@ import json
 import os
 import time
 from collections import defaultdict, deque
+from hashlib import sha256
 from pathlib import Path
 from threading import Lock
 
@@ -11,7 +12,11 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from openai import OpenAIError
 
-from app.groundcheck import run_groundcheck
+from app.groundcheck import (
+    GroundCheckResponseError,
+    detect_instruction_like_content,
+    run_groundcheck,
+)
 from app.schemas import CheckRequest, CheckResponse
 
 
@@ -79,6 +84,8 @@ def check_claims(payload: CheckRequest, request: Request) -> CheckResponse:
     if not client_ip:
         client_ip = request.client.host if request.client else "unknown"
     enforce_rate_limit(client_ip)
+    safety_identifier = sha256(f"groundcheck:{client_ip}".encode()).hexdigest()
+    warnings = detect_instruction_like_content(payload.source_context, payload.agent_output)
 
     if not os.getenv("OPENAI_API_KEY"):
         raise HTTPException(
@@ -87,7 +94,13 @@ def check_claims(payload: CheckRequest, request: Request) -> CheckResponse:
         )
 
     try:
-        result = run_groundcheck(payload.source_context, payload.agent_output)
+        result = run_groundcheck(
+            payload.source_context,
+            payload.agent_output,
+            safety_identifier=safety_identifier,
+        )
+    except GroundCheckResponseError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
     except OpenAIError as exc:
         raise HTTPException(status_code=502, detail=f"OpenAI API error: {exc}") from exc
     except Exception as exc:
@@ -97,4 +110,5 @@ def check_claims(payload: CheckRequest, request: Request) -> CheckResponse:
         model=os.getenv("OPENAI_MODEL", "gpt-5.6"),
         verdicts=result.verdicts,
         summary=result.summary,
+        warnings=warnings,
     )
