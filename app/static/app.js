@@ -10,6 +10,7 @@ const modelBadge = document.querySelector("#modelBadge");
 const scoreboard = document.querySelector("#scoreboard");
 const flaggedCount = document.querySelector("#flaggedCount");
 const passCount = document.querySelector("#passCount");
+const guardrailWarnings = document.querySelector("#guardrailWarnings");
 const verdictList = document.querySelector("#verdictList");
 const verdictTemplate = document.querySelector("#verdictTemplate");
 let latestResult = null;
@@ -44,6 +45,14 @@ function renderVerdicts(data) {
   flaggedCount.textContent = flagged.length;
   passCount.textContent = passed.length;
   scoreboard.hidden = false;
+  const warnings = data.warnings || [];
+  guardrailWarnings.replaceChildren();
+  guardrailWarnings.hidden = warnings.length === 0;
+  for (const warning of warnings) {
+    const item = document.createElement("p");
+    item.textContent = warning;
+    guardrailWarnings.appendChild(item);
+  }
   summary.textContent =
     data.summary ||
     `${flagged.length} flagged claim${flagged.length === 1 ? "" : "s"} and ${passed.length} passed claim${
@@ -101,6 +110,8 @@ async function loadDemo({ autoRun = false, caseId = caseSelect.value } = {}) {
       : "Demo loaded. Ready to run.";
     modelBadge.textContent = "Ready";
     scoreboard.hidden = true;
+    guardrailWarnings.hidden = true;
+    guardrailWarnings.replaceChildren();
     latestResult = null;
     setReportActions(false);
     verdictList.innerHTML = "";
@@ -131,6 +142,8 @@ async function runCheck() {
   summary.textContent = "Checking claims against source context...";
   modelBadge.textContent = "Running";
   scoreboard.hidden = true;
+  guardrailWarnings.hidden = true;
+  guardrailWarnings.replaceChildren();
   latestResult = null;
   setReportActions(false);
   verdictList.innerHTML = "";
@@ -161,14 +174,20 @@ function buildTextReport(data) {
     .filter((item) => item.status === "FLAGGED")
     .sort((a, b) => severityRank(a) - severityRank(b));
   const passed = verdicts.filter((item) => item.status === "PASS");
+  const warnings = data.warnings || [];
   const lines = [
     "GroundCheck Report",
     `Model: ${data.model || "unknown"}`,
     "",
     data.summary || "",
-    "",
-    `Flagged claims (${flagged.length})`,
   ];
+
+  if (warnings.length) {
+    lines.push("", "Guardrail warnings");
+    for (const warning of warnings) lines.push(`- ${warning}`);
+  }
+
+  lines.push("", `Flagged claims (${flagged.length})`);
 
   for (const item of flagged) {
     lines.push(`- [${item.severity}] ${item.claim}`);

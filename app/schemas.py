@@ -24,3 +24,4 @@ class CheckResult(BaseModel):
 
 class CheckResponse(CheckResult):
     model: str
+    warnings: list[str] = Field(default_factory=list)

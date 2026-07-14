@@ -114,7 +114,14 @@ textarea:focus {
   align-items: end;
   justify-content: flex-end;
   gap: 10px;
-  margin: 18px 0 24px;
+  margin: 18px 0 8px;
+}
+
+.privacy-note {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: right;
 }
 
 .case-picker {
@@ -212,6 +219,23 @@ button:disabled {
 .summary {
   margin: 12px 0 0;
   color: var(--muted);
+}
+
+.guardrail-warnings {
+  margin-top: 14px;
+  border-left: 4px solid var(--amber);
+  padding: 10px 12px;
+  background: #fff7ed;
+  color: #7c2d12;
+  font-size: 0.9rem;
+}
+
+.guardrail-warnings p {
+  margin: 0;
+}
+
+.guardrail-warnings p + p {
+  margin-top: 6px;
 }
 
 .scoreboard {
@@ -322,6 +346,10 @@ button:disabled {
   .actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .privacy-note {
+    text-align: left;
   }
 
   .case-picker,

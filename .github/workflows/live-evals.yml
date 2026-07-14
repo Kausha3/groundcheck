@@ -1,0 +1,27 @@
+name: Live model evals
+
+on:
+  workflow_dispatch:
+
+jobs:
+  groundcheck-evals:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-5.6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python evals/run_evals.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: groundcheck-eval-report
+          path: evals/latest-report.json

@@ -35,6 +35,7 @@
         <button id="loadDemo" type="button" class="secondary">Load case</button>
         <button id="runCheck" type="button" class="primary">Run GroundCheck</button>
       </div>
+      <p class="privacy-note">Text is sent to OpenAI for analysis. GroundCheck does not save submissions to a database.</p>
 
       <section class="results" aria-live="polite">
         <div class="results-header">
@@ -49,6 +50,7 @@
           <span class="score flagged-score"><strong id="flaggedCount">0</strong> flagged</span>
           <span class="score pass-score"><strong id="passCount">0</strong> passed</span>
         </div>
+        <div id="guardrailWarnings" class="guardrail-warnings" hidden></div>
         <p id="summary" class="summary">Load the demo or paste your own source context and agent output.</p>
         <div id="verdictList" class="verdict-list"></div>
       </section>
