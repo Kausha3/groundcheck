@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GroundCheck</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Developer Tools</p>
+          <h1>GroundCheck</h1>
+        </div>
+        <p class="tagline">Unit tests for AI agent output.</p>
+      </header>
+
+      <section class="workspace" aria-label="Claim review workspace">
+        <label class="pane">
+          <span>Source context</span>
+          <textarea id="sourceContext" maxlength="20000" spellcheck="false"></textarea>
+        </label>
+        <label class="pane">
+          <span>AI agent output</span>
+          <textarea id="agentOutput" maxlength="20000" spellcheck="false"></textarea>
+        </label>
+      </section>
+
+      <div class="actions">
+        <label class="case-picker">
+          <span>Example</span>
+          <select id="caseSelect"></select>
+        </label>
+        <button id="loadDemo" type="button" class="secondary">Load case</button>
+        <button id="runCheck" type="button" class="primary">Run GroundCheck</button>
+      </div>
+
+      <section class="results" aria-live="polite">
+        <div class="results-header">
+          <h2>Claim Review</h2>
+          <div class="result-tools">
+            <button id="copyReport" type="button" class="secondary small" disabled>Copy report</button>
+            <button id="downloadJson" type="button" class="secondary small" disabled>Export JSON</button>
+            <span id="modelBadge" class="badge">Ready</span>
+          </div>
+        </div>
+        <div id="scoreboard" class="scoreboard" hidden>
+          <span class="score flagged-score"><strong id="flaggedCount">0</strong> flagged</span>
+          <span class="score pass-score"><strong id="passCount">0</strong> passed</span>
+        </div>
+        <p id="summary" class="summary">Load the demo or paste your own source context and agent output.</p>
+        <div id="verdictList" class="verdict-list"></div>
+      </section>
+    </main>
+
+    <template id="verdictTemplate">
+      <article class="verdict">
+        <div class="verdict-top">
+          <span class="status"></span>
+          <span class="severity"></span>
+        </div>
+        <p class="claim"></p>
+        <p class="explanation"></p>
+        <p class="source-quote"></p>
+      </article>
+    </template>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

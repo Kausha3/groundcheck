@@ -1,0 +1,23 @@
+[
+  {
+    "id": "homewiz-lease",
+    "title": "Lease summary",
+    "description": "A property workflow example with wrong numbers, a fabricated policy, and a wrong count.",
+    "source_context": "Lease Agreement - Unit 4B\nTenant: Sarah Chen\nMonthly rent: $2,450\nLease term: 12 months, starting March 1, 2026\nSecurity deposit: $2,450 (one month's rent)\nPets allowed: No\nParking: One assigned spot included",
+    "agent_output": "The lease for Unit 4B, tenant Sarah Chen, shows a monthly rent of $2,850. The lease runs for 12 months starting March 1, 2026. The security deposit is one month's rent. Pets are allowed with a $200 deposit. Parking includes two assigned spots."
+  },
+  {
+    "id": "api-spec-summary",
+    "title": "API spec summary",
+    "description": "A developer-docs example where an agent invents unsupported API behavior.",
+    "source_context": "Payments API Spec v2\nEndpoint: POST /payments\nRequired fields: idempotency_key, amount_cents, currency\namount_cents must be an integer greater than 0\nSupported currencies: USD, EUR\nPayment statuses: pending, succeeded, failed\nRefunds are not supported in v2\nClient timeout: 10 seconds",
+    "agent_output": "The v2 Payments API uses POST /payments and requires amount_cents as a positive integer. The idempotency key is optional for retry safety. Supported currencies include USD, EUR, and GBP. Payment status may be pending, succeeded, or failed. The API also includes refund support in v2. Clients should use a 10 second timeout."
+  },
+  {
+    "id": "product-requirements",
+    "title": "Product requirements",
+    "description": "A product/spec example where an agent changes launch, auth, and upload constraints.",
+    "source_context": "Project Brief - FileDrop Beta\nLaunch audience: private beta only\nRuntime: Node.js 20\nDatabase: none required for the first beta\nAuthentication: magic-link email only\nUpload limit: 10 MB per file\nSupported file types: PDF and TXT\nAdmin dashboard: out of scope for beta",
+    "agent_output": "FileDrop is ready for a public launch and should run on Node.js 18. The first beta does not require a database. Authentication supports magic-link email and Google OAuth. Users can upload PDF and TXT files up to 25 MB. The admin dashboard is included in the beta scope."
+  }
+]
