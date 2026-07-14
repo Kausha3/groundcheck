@@ -43,6 +43,16 @@ The built-in HomeWiz lease example includes three planted errors and several sup
 - A server-side evidence check fails closed when a PASS lacks a verbatim excerpt from the source.
 - Instruction-like content is surfaced in the interface without deleting or rewriting the evidence.
 - Requests use bounded inputs and outputs, timeouts, retries, privacy-preserving safety identifiers, and `store=False`.
+- Review responses use `Cache-Control: no-store`, and restrictive browser security headers block third-party scripts, framing, and cross-origin connections.
+
+## Data handling
+
+- Source context and agent output are transmitted to OpenAI for analysis.
+- GroundCheck has no database and does not intentionally persist submissions.
+- The Responses API request sets `store=False`; this does not override any retention OpenAI may require for security or legal reasons.
+- API and unexpected-error responses are generic so provider details, request contents, and credentials are not reflected to the browser.
+- The OpenAI API key remains server-side in ignored local environment files and sensitive deployment environment variables.
+- The public demo is not intended for confidential, regulated, or personally identifiable information.
 
 ## Evaluations
 

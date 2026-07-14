@@ -35,6 +35,26 @@ app = FastAPI(title="GroundCheck", version="0.1.0")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; script-src 'self'; style-src 'self'; "
+        "connect-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; "
+        "frame-ancestors 'none'; form-action 'self'"
+    )
+    response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+    response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    if request.url.path == "/api/check":
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["Pragma"] = "no-cache"
+    return response
+
+
 @app.get("/")
 def index() -> FileResponse:
     return FileResponse(STATIC_DIR / "index.html")
@@ -65,11 +85,11 @@ def demo_case(case_id: str) -> dict[str, str]:
     raise HTTPException(status_code=404, detail="Demo case not found")
 
 
-def enforce_rate_limit(client_ip: str) -> None:
+def enforce_rate_limit(client_identifier: str) -> None:
     now = time.monotonic()
     cutoff = now - RATE_LIMIT_WINDOW_SECONDS
     with request_history_lock:
-        history = request_history[client_ip]
+        history = request_history[client_identifier]
         while history and history[0] < cutoff:
             history.popleft()
         if len(history) >= RATE_LIMIT_REQUESTS:
@@ -83,8 +103,8 @@ def check_claims(payload: CheckRequest, request: Request) -> CheckResponse:
     client_ip = forwarded_for.split(",", 1)[0].strip()
     if not client_ip:
         client_ip = request.client.host if request.client else "unknown"
-    enforce_rate_limit(client_ip)
     safety_identifier = sha256(f"groundcheck:{client_ip}".encode()).hexdigest()
+    enforce_rate_limit(safety_identifier)
     warnings = detect_instruction_like_content(payload.source_context, payload.agent_output)
 
     if not os.getenv("OPENAI_API_KEY"):
@@ -100,11 +120,14 @@ def check_claims(payload: CheckRequest, request: Request) -> CheckResponse:
             safety_identifier=safety_identifier,
         )
     except GroundCheckResponseError as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
+        raise HTTPException(
+            status_code=502,
+            detail="The model could not return a structured review.",
+        ) from exc
     except OpenAIError as exc:
-        raise HTTPException(status_code=502, detail=f"OpenAI API error: {exc}") from exc
+        raise HTTPException(status_code=502, detail="OpenAI API request failed. Try again.") from exc
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"GroundCheck failed: {exc}") from exc
+        raise HTTPException(status_code=500, detail="GroundCheck could not complete the review.") from exc
 
     return CheckResponse(
         model=os.getenv("OPENAI_MODEL", "gpt-5.6"),

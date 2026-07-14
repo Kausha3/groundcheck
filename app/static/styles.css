@@ -114,7 +114,14 @@ textarea:focus {
   align-items: end;
   justify-content: flex-end;
   gap: 10px;
-  margin: 18px 0 24px;
+  margin: 18px 0 8px;
+}
+
+.privacy-note {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: right;
 }
 
 .case-picker {
@@ -339,6 +346,10 @@ button:disabled {
   .actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .privacy-note {
+    text-align: left;
   }
 
   .case-picker,
