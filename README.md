@@ -6,6 +6,8 @@ GroundCheck helps developers catch AI agent output that looks right but is not g
 
 **Tagline:** GroundCheck: unit tests for AI agent output. Catches hallucinated claims before you ship them.
 
+**Live demo:** https://groundcheck-zeta.vercel.app
+
 ## What it does
 
 - Accepts source context and AI agent output.
@@ -41,6 +43,10 @@ uvicorn app.main:app --reload
 ```
 
 Open `http://127.0.0.1:8000`.
+
+## Deploy
+
+The repository is connected to Vercel. Production uses `app.main:app` as the FastAPI entry point and requires `OPENAI_API_KEY` and `OPENAI_MODEL` as server-side environment variables.
 
 ## Environment
 

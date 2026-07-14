@@ -4,6 +4,11 @@
 
 Unit tests for AI agent output. Catch hallucinated claims before you ship them.
 
+## Links
+
+- Live project: https://groundcheck-zeta.vercel.app
+- Source code: https://github.com/Kausha3/groundcheck
+
 ## Project description
 
 AI agent output often fails in the most dangerous way: it looks polished, confident, and plausible while quietly changing a number, inventing a requirement, or overstating what a source says. GroundCheck adds a review gate before a human trusts that output.

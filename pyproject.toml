@@ -2,6 +2,13 @@
 name = "groundcheck"
 version = "0.1.0"
 requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115.0",
+  "openai>=1.99.0",
+  "pydantic>=2.8.0",
+  "python-dotenv>=1.0.1",
+  "uvicorn[standard]>=0.30.0",
+]
 
 [tool.vercel]
 entrypoint = "app.main:app"
