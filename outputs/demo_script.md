@@ -14,7 +14,7 @@ Show the lease source on the left and the generated summary on the right.
 
 Click **Run GroundCheck** and let the verdicts appear.
 
-"The rent is inflated by $400, the summary invents a pet policy that does not exist, and it doubles the parking spots. GroundCheck catches all three with appropriate severity ratings. It also passes the four accurate claims, so it is not simply rejecting everything."
+"The rent is inflated by $400, the summary invents a pet policy that does not exist, and it doubles the parking spots. GroundCheck catches all three with appropriate severity ratings. It also passes the supported details, so it is not simply rejecting everything."
 
 ## 1:05-1:35 - Developer workflow
 

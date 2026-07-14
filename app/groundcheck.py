@@ -12,6 +12,9 @@ Your job is to compare AI agent output against the provided source context.
 Identify each meaningful factual claim in the agent output and decide whether the source context supports it.
 
 Rules:
+- Cover every factual assertion in the agent output exactly once: do not omit or duplicate assertions.
+- Make each verdict one actionable review unit. Split independent entity identifiers or named parties from the main assertion, but keep dependent qualifiers such as dates, amounts, counts, conditions, and modifiers attached to the policy, term, entitlement, or outcome they define.
+- Example: "Contract A for customer B has a $500 fee" contains three claims. "Access is allowed with a $20 fee," "the term is 12 months starting January 1," and "the plan includes two priority seats" are each one claim, not two or three fragments.
 - PASS only when the source context directly supports the claim.
 - FLAGGED when the claim is contradicted, unsupported, fabricated, numerically wrong, or overstates what the source says.
 - Do not use outside knowledge.

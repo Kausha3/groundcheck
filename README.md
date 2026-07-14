@@ -19,12 +19,12 @@ GroundCheck helps developers catch AI agent output that looks right but is not g
 
 ## Demo case
 
-The built-in HomeWiz lease example includes three planted errors and four supported claims:
+The built-in HomeWiz lease example includes three planted errors and several supported claims:
 
 - Wrong rent amount: `$2,850` instead of `$2,450` (`high`)
 - Fabricated pet policy: output says pets are allowed with a deposit, source says no pets (`high`)
 - Wrong parking count: two spots instead of one (`medium`)
-- Correct passes: unit number, tenant, lease term, and security deposit
+- Correctly supported details include the unit number, tenant, lease term, and security deposit
 
 ## How it works
 
