@@ -136,3 +136,7 @@ Codex was used to turn the hackathon brief and product framing into a working fu
 ## Current scope
 
 GroundCheck is a proof of concept for source-grounded review, not a universal truth engine. It deliberately uses only the supplied context, and its claim decomposition and severity judgments are model-generated. The public demo applies input, output, and request limits to control API usage.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

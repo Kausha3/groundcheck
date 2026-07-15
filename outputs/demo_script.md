@@ -32,7 +32,7 @@ Select the prompt-injection example.
 
 ## 1:35-2:05 - Implementation
 
-"GroundCheck is a full-stack FastAPI application built with Codex. The backend calls GPT-5.6 through the OpenAI Responses API and requires a typed claim-by-claim result: status, severity, confidence, explanation, and source evidence. Every PASS is checked again by the server for an exact source quote. Ten deterministic tests and six live model evaluations guard this behavior."
+"GroundCheck is a full-stack FastAPI application built with Codex. The backend calls GPT-5.6 through the OpenAI Responses API and requires a typed claim-by-claim result: status, severity, confidence, explanation, and source evidence. Every PASS is checked again by the server for an exact source quote. Eleven deterministic tests and six live model evaluations guard this behavior."
 
 ## 2:05-2:25 - Close
 
